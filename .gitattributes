@@ -1,0 +1,2 @@
+# the makers' records and the golden texts are kept byte for byte: the tests compare them as they are
+tests/data/* -text

@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plugin-platform-pi"
+version = "0.1.0"  # the plugin's own release (CHANGELOG.md); the app shows it on the Plugins view
+description = "Pi for Liminal: Pi's open-source coding agent, pinned, started against a local model server."
+readme = "README.md"
+requires-python = ">=3.11"
+# the library it plugs into: liminal-libs 1.66.0's harness base (machines/ai.py and machines/harness.py: the install's
+# job, Use…, Open… and Command…, Liminal's MCP for a harness, its values checked, no pair of Liminal's in what it
+# starts), its private Node.js and npm (machines/node.py), its pinned downloads (machines/download.py) and Pi's mark
+# in icons.js
+dependencies = ["liminal-libs>=1.66.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.entry-points."liminal.providers"]
+pi = "plugin_platform_pi"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
