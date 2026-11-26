@@ -6,7 +6,7 @@ on:
 
 env:
   # the library release it is tested against (its plugin API): the release branch until a tag is pinned. It needs
-  # liminal-libs 1.66.0 (machines/node.py, Liminal's MCP for a harness), which that branch holds.
+  # liminal-libs 1.99.0 (its base's changes asked only from the page; machines/node.py), which that branch holds.
   LIMINAL_LIB_REF: release/0.2.0
 
 jobs:

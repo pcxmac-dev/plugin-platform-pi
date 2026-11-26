@@ -12,7 +12,8 @@ requires-python = ">=3.11"
 # job, Use…, Open… and Command…, Liminal's MCP for a harness, its values checked, no pair of Liminal's in what it
 # starts), its private Node.js and npm (machines/node.py), its pinned downloads (machines/download.py) and Pi's mark
 # in icons.js
-dependencies = ["liminal-libs>=1.66.0"]
+# and 1.99.0, the floor: the base's changes (install, uninstall, use, open) asked only from its page
+dependencies = ["liminal-libs>=1.99.0"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]

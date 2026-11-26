@@ -7,7 +7,7 @@ engines, top 4 agentic harnesses (open source)", "both linux and windows compati
 Pi "kept, with the plugin's own permission step before every shell command, edit and write", and the ports a tool
 opens by itself said on its page). A harness on liminal-libs 1.66.0's AI bases (`Harness`, plugin API 2.2),
 `SECTION = "ai"`, `GROUP = "harness"`, `order = 524`, `ICON = "pi"`: the standard interface of a harness, with no hook
-of its own. Needs liminal-libs>=1.66.0.
+of its own. Needs liminal-libs>=1.99.0, whose harness base asks its changes only from the page.
 
 - **Install, Update, Uninstall** from the page: Node.js 24.22.3 for this system (not pinned in this release: Install
   says so), Pi 1.5.2 by that node's own npm with no script run, its sha512 compared with the pin and its lock kept for

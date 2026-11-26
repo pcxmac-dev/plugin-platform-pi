@@ -64,7 +64,7 @@ def test_the_changelog_names_its_release_and_the_users_words():
     changelog = words("CHANGELOG.md")
     assert changelog.startswith("# Changelog ## 0.1.0 (2026-11-26)")
     assert ('"kept, with the plugin\'s own permission step before every shell command, edit and write"' in changelog
-            and "Needs liminal-libs>=1.66.0." in changelog)
+            and "Needs liminal-libs>=1.99.0," in changelog)
 
 
 def test_no_line_is_longer_than_120_characters():

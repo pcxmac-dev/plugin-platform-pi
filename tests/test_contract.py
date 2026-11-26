@@ -107,8 +107,8 @@ def test_a_copy_the_registry_hands_out_shares_what_the_plugin_keeps():
 def test_its_versions_and_its_floor_are_pyprojects():
     project = PYPROJECT["project"]
     assert module.__version__ == project["version"] == "0.1.0"
-    assert project["dependencies"] == ["liminal-libs>=1.66.0"]
-    assert module.LIBS_FLOOR == module.MACHINE.LIBS_FLOOR == "1.66.0"
+    assert project["dependencies"] == ["liminal-libs>=1.99.0"]
+    assert module.LIBS_FLOOR == module.MACHINE.LIBS_FLOOR == "1.99.0"  # the base's changes page-only
     assert project["entry-points"]["liminal.providers"] == {"pi": "plugin_platform_pi"}
     assert release(liminal_libs.__version__) >= release(module.LIBS_FLOOR)
     assert module.MACHINE.too_old() == ""
@@ -117,13 +117,13 @@ def test_its_versions_and_its_floor_are_pyprojects():
 
 
 def test_a_library_older_than_its_floor_is_said_and_refuses_every_hook(monkeypatch, tmp_path):
-    """Below 1.66.0 there is no machines/node.py, no pi mark and no Liminal's MCP for a harness: the page says so, and
-    nothing runs."""
+    """Below 1.99.0 its base's changes can be asked by any program (below 1.66.0 there is no machines/node.py
+    either): the page says so, and nothing runs."""
     from conftest import made, refused
 
     p = made(tmp_path)
-    monkeypatch.setattr(liminal_libs, "__version__", "1.65.1")
-    assert p.too_old() == "Pi needs liminal-libs 1.66.0 or newer, and this is 1.65.1: update the library"
+    monkeypatch.setattr(liminal_libs, "__version__", "1.98.2")
+    assert p.too_old() == "Pi needs liminal-libs 1.99.0 or newer, and this is 1.98.2: update the library"
     status = p.status()
     assert status["valid"] is False and status["why"] == p.too_old()
     assert refused(lambda: p.ask("install", True)) == p.too_old()
