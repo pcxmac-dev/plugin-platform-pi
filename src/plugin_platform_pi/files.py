@@ -105,8 +105,7 @@ PERMISSION = """\
 // call that is not a read: each shell command (bash, powershell), each edit and each write, and any other tool. A
 // call you decline is not run, and the model is told so. Without a screen to ask on (Pi's print and json modes)
 // every such call is refused, and so is a shell command too long to be shown whole.
-// Not asked: its reads ({reads}), and Liminal's MCP tools ({elsewhere}*), which the MCP plugin
-// grants and holds itself.
+// Not asked: its reads ({reads}){elsewhere_said}.
 // A command you allow runs without Liminal's token and key in its environment ({unset}).
 
 const READS = new Set({reads_js});
@@ -136,6 +135,11 @@ function described(name: string, input: any): string {{
   }}
   if (name === "edit") {{
     const edits = Array.isArray(input?.edits) ? input.edits : [];
+    if (edits.length === 0) {{
+      let given = "";
+      try {{ given = JSON.stringify(input ?? {{}}, null, 1); }} catch {{ given = "(its input cannot be shown)"; }}
+      return cut("Edit " + shown(input?.path) + ", as it was given:\\n" + shown(given));
+    }}
     const parts = edits.map((e: any, i: number) =>
       "--- " + (i + 1) + ": replaces\\n" + shown(e?.oldText) + "\\n+++ with\\n" + shown(e?.newText));
     return cut("Edit " + shown(input?.path) + " (" + edits.length + " change" + (edits.length === 1 ? "" : "s") +
@@ -149,7 +153,9 @@ function described(name: string, input: any): string {{
 export default function liminalPermission(pi: any) {{
   pi.on("tool_call", async (event: any, ctx: any) => {{
     const name = typeof event?.toolName === "string" ? event.toolName : "";
-    if (READS.has(name) || (name.startsWith(DECIDED_ELSEWHERE) && name.length > DECIDED_ELSEWHERE.length)) {{
+    const elsewhere = DECIDED_ELSEWHERE !== "" && name.startsWith(DECIDED_ELSEWHERE) &&
+      name.length > DECIDED_ELSEWHERE.length;
+    if (READS.has(name) || elsewhere) {{
       return undefined;
     }}
     if (!ctx || !ctx.hasUI || !ctx.ui || typeof ctx.ui.confirm !== "function") {{
@@ -189,11 +195,16 @@ export default function liminalPermission(pi: any) {{
 """
 
 
-def permission_ts(plugin_version: str) -> str:
-    """The permission step's text (TypeScript, which Pi loads by -e): written whole at every start."""
+def permission_ts(plugin_version: str, mcp: bool = False) -> str:
+    """The permission step's text (TypeScript, which Pi loads by -e): written whole at every start. Liminal's MCP
+    tools pass it unasked only where `mcp` (Liminal's MCP wired for this start: the MCP plugin grants and holds them);
+    otherwise they are asked like any other tool."""
+    elsewhere = DECIDED_ELSEWHERE if mcp else ""
+    said = (f", and Liminal's MCP tools ({elsewhere}*), which the MCP plugin\n// grants and holds itself" if mcp else
+            "; Liminal's MCP is off for this start, so an MCP tool is asked\n// like any other")
     return PERMISSION.format(
-        version=PERMISSION_VERSION, plugin=plugin_version, pi=PIN, reads=", ".join(READS), elsewhere=DECIDED_ELSEWHERE,
-        unset=", ".join(UNSET), reads_js=_js(list(READS)), elsewhere_js=_js(DECIDED_ELSEWHERE),
+        version=PERMISSION_VERSION, plugin=plugin_version, pi=PIN, reads=", ".join(READS), elsewhere_said=said,
+        unset=", ".join(UNSET), reads_js=_js(list(READS)), elsewhere_js=_js(elsewhere),
         shells_js=_js(list(SHELLS)), most=SHOWN_MOST, unset_js=_js(list(UNSET)))
 
 

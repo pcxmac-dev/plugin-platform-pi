@@ -107,13 +107,27 @@ def test_it_holds_every_tool_call_on_pis_tool_call_event_and_asks_on_pis_screen(
     assert "catch {\n      yes = false;" in step
 
 
-def test_only_reads_and_liminals_own_mcp_tools_run_without_asking(step):
+def test_only_reads_run_without_asking_and_liminals_mcp_tools_only_while_it_is_wired(step):
     assert files.READS == ("read", "grep", "find", "ls")
     assert 'const READS = new Set(["read", "grep", "find", "ls"]);' in step
-    assert 'const DECIDED_ELSEWHERE = "mcp__liminal__";' in step
+    assert 'const DECIDED_ELSEWHERE = "";' in step and "Liminal's MCP is off for this start" in step
+    assert 'DECIDED_ELSEWHERE !== "" && name.startsWith(DECIDED_ELSEWHERE)' in step  # "": every MCP tool asked
     assert "name.length > DECIDED_ELSEWHERE.length" in step  # the prefix alone is no tool of Liminal's
     for tool in ("bash", "powershell", "edit", "write"):  # never let through by a list
         assert f'"{tool}"' not in step.split("const READS")[1].split(";")[0]
+    on = files.permission_ts("0.1.0", mcp=True)
+    assert on == (DATA / "permission-mcp.ts").read_text(encoding="utf-8")
+    assert 'const DECIDED_ELSEWHERE = "mcp__liminal__";' in on and "which the MCP plugin\n// grants and holds" in on
+    assert [a for a, b in zip(step.splitlines(), on.splitlines()) if a != b] == [
+        "// Not asked: its reads (read, grep, find, ls); Liminal's MCP is off for this start, so an MCP tool is asked",
+        "// like any other.", 'const DECIDED_ELSEWHERE = "";']
+
+
+def test_an_edit_not_in_its_known_shape_is_shown_as_it_was_given(step):
+    """Pi 1.5.2's edit is {path, edits: [{oldText, newText}]}: anything else (no edits, an empty list) is shown whole
+    as JSON, never as "0 changes"."""
+    edit = step.split('if (name === "edit") {')[1].split("const parts")[0]
+    assert "if (edits.length === 0)" in edit and "JSON.stringify(input" in edit and ", as it was given:" in edit
 
 
 def test_without_a_screen_every_call_it_asks_is_refused(step):

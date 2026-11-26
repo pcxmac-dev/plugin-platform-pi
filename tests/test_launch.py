@@ -332,6 +332,8 @@ def test_liminals_mcp_through_the_bridge_with_a_token_for_the_window_alone(tmp_p
     for name in ("models.json", "mcp.json", "settings.json"):
         assert token not in (p.agent_dir() / name).read_text(encoding="utf-8")
     assert agent_file(p, "mcp.json") == golden("mcp-bridge.json")  # the hold (50 s) and a minute more
+    # its tools pass the permission step unasked: the MCP plugin grants and holds them
+    assert p.extension_path().read_text(encoding="utf-8") == (DATA / "permission-mcp.ts").read_text(encoding="utf-8")
     lines = p.command(str(project))["lines"]
     assert not any(token in line for line in lines) and len(p.app.minted) == 1  # Command… asks no token
     p.out.popen.windows[0].code = 0

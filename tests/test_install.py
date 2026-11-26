@@ -107,7 +107,7 @@ def test_install_puts_node_pi_and_ripgrep_in_place_and_in_use(tmp_path, monkeypa
     assert p.installed().path == str(cli) and p.installed().version == "1.5.2"
     windows = system == "windows"
     program = folder / "node" / ("node.exe" if windows else "bin/node")
-    npm_cli = folder / "node" / ("node_modules/npm/bin/npm-cli.js" if windows else "lib/node_modules/npm/bin/npm-cli.js")
+    npm_cli = folder / "node" / ("" if windows else "lib") / "node_modules/npm/bin/npm-cli.js"
     [ran] = npm.ran
     assert ran["argv"] == [str(program), str(npm_cli), "install", "--prefix", str(folder / "cli"), "--save-exact",
                            "--ignore-scripts", "--no-audit", "--no-fund", "--no-update-notifier",

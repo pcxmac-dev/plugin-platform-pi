@@ -5,12 +5,12 @@
 // call that is not a read: each shell command (bash, powershell), each edit and each write, and any other tool. A
 // call you decline is not run, and the model is told so. Without a screen to ask on (Pi's print and json modes)
 // every such call is refused, and so is a shell command too long to be shown whole.
-// Not asked: its reads (read, grep, find, ls), and Liminal's MCP tools (mcp__liminal__*), which the MCP plugin
-// grants and holds itself.
+// Not asked: its reads (read, grep, find, ls); Liminal's MCP is off for this start, so an MCP tool is asked
+// like any other.
 // A command you allow runs without Liminal's token and key in its environment (LIMINAL_MCP_TOKEN, LIMINAL_SERVER_KEY).
 
 const READS = new Set(["read", "grep", "find", "ls"]);
-const DECIDED_ELSEWHERE = "mcp__liminal__";
+const DECIDED_ELSEWHERE = "";
 const SHELLS = new Set(["bash", "powershell"]);
 const MOST = 4000;
 const UNSET = ["LIMINAL_MCP_TOKEN", "LIMINAL_SERVER_KEY"];
@@ -36,6 +36,11 @@ function described(name: string, input: any): string {
   }
   if (name === "edit") {
     const edits = Array.isArray(input?.edits) ? input.edits : [];
+    if (edits.length === 0) {
+      let given = "";
+      try { given = JSON.stringify(input ?? {}, null, 1); } catch { given = "(its input cannot be shown)"; }
+      return cut("Edit " + shown(input?.path) + ", as it was given:\n" + shown(given));
+    }
     const parts = edits.map((e: any, i: number) =>
       "--- " + (i + 1) + ": replaces\n" + shown(e?.oldText) + "\n+++ with\n" + shown(e?.newText));
     return cut("Edit " + shown(input?.path) + " (" + edits.length + " change" + (edits.length === 1 ? "" : "s") +
@@ -49,7 +54,9 @@ function described(name: string, input: any): string {
 export default function liminalPermission(pi: any) {
   pi.on("tool_call", async (event: any, ctx: any) => {
     const name = typeof event?.toolName === "string" ? event.toolName : "";
-    if (READS.has(name) || (name.startsWith(DECIDED_ELSEWHERE) && name.length > DECIDED_ELSEWHERE.length)) {
+    const elsewhere = DECIDED_ELSEWHERE !== "" && name.startsWith(DECIDED_ELSEWHERE) &&
+      name.length > DECIDED_ELSEWHERE.length;
+    if (READS.has(name) || elsewhere) {
       return undefined;
     }
     if (!ctx || !ctx.hasUI || !ctx.ui || typeof ctx.ui.confirm !== "function") {

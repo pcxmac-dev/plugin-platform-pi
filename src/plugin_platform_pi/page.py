@@ -74,8 +74,9 @@ KEYED = ("{server}'s key reaches Pi in its environment alone (" + SECRET + ", wh
 MCP = (f"With Liminal's MCP on (under Use…), each window reaches it through the MCP plugin's bridge, an MCP server "
        f"of Pi's ({MCP_NAME}), with a token for that window alone in Pi's environment ({MCP_SECRET}, which its "
        "mcp.json entry names), ended once the window is gone. The commands you allow run without it, but a program "
-       "running as you could still read Pi's own environment. What it may list and call is granted on the MCP plugin's page, "
-       "which may hold a call for your answer there: Pi waits as long as the MCP plugin holds it, and a minute more.")
+       "running as you could still read Pi's own environment. What it may list and call is granted on the MCP plugin's "
+       "page, which may hold a call for your answer there: Pi waits as long as the MCP plugin holds it, and a minute "
+       "more.")
 
 
 def row(what: str, said: str) -> list[str]:

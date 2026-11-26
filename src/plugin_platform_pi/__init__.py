@@ -467,7 +467,7 @@ class PiPlugin(Harness):
             return {}
         return said if isinstance(said, dict) else {}
 
-    def write_files(self, *, models: dict, mcp: dict, shell_path: str) -> None:
+    def write_files(self, *, models: dict, mcp: dict, shell_path: str, mcp_on: bool = False) -> None:
         """Pi's three files and the permission step written whole, one start at a time, in the plugin's own folders
         (owner only)."""
         mounts.owner_only(self.config_dir(), "Configuring Pi")
@@ -477,7 +477,7 @@ class PiPlugin(Harness):
             self._write(agent / "models.json", files.text(models))
             self._write(agent / "mcp.json", files.text(mcp))
             self._write(agent / "settings.json", files.text(settings))
-            self._write(self.extension_path(), files.permission_ts(__version__))
+            self._write(self.extension_path(), files.permission_ts(__version__, mcp=mcp_on))
 
     def place_tools(self, here: Path) -> list[str]:
         """The install's tools copied where Pi looks before PATH (its agent folder's bin/), where they are missing or
@@ -544,7 +544,7 @@ class PiPlugin(Harness):
                 raise Refusal(page.value_words("the MCP plugin's bridge is not named by a whole path"))
             mcp = files.mcp_json(wiring.argv, wiring.timeout_s)
         models = files.models_json(base_url=address, model=use.model, context=context, keyed=bool(key))
-        self.write_files(models=models, mcp=mcp, shell_path=bash)
+        self.write_files(models=models, mcp=mcp, shell_path=bash, mcp_on=wiring is not None)
         self.place_tools(here)
         env = {"PI_CODING_AGENT_DIR": str(self.agent_dir()), "PI_CODING_AGENT_SESSION_DIR": str(self.sessions_dir()),
                **pins.OFF, "NODE_COMPILE_CACHE": str(self.config_dir().joinpath(*pins.COMPILE_CACHE))}

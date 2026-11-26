@@ -73,8 +73,10 @@ timeout; a handler that throws blocks the tool). The plugin's extension, loaded 
   and direction characters shown as `\uXXXX`, so what is asked cannot draw over its question);
 - refuses the call (`{block: true, reason}`) when you decline, when Pi has no screen to ask on (its print and json
   modes), and when a shell command is longer than 4,000 characters, too long to be shown whole;
-- lets Pi's reads (`read`, `grep`, `find`, `ls`) run without asking: they read whatever you can read; and Liminal's
-  MCP tools (`mcp__liminal__*`), which the MCP plugin grants and may hold for your answer on its own page;
+- lets Pi's reads (`read`, `grep`, `find`, `ls`) run without asking: they read whatever you can read; and, only for a
+  start with Liminal's MCP on, Liminal's MCP tools (`mcp__liminal__*`), which the MCP plugin grants and may hold for
+  your answer on its own page (with it off, an MCP tool is asked like any other);
+- shows an edit whole as it was given where its input is not in Pi 1.5.2's shape (`edits: [{oldText, newText}]`);
 - runs an allowed command without `LIMINAL_MCP_TOKEN` and `LIMINAL_SERVER_KEY` in its environment (it is told so).
 
 What you allow runs at once with your rights, with no sandbox, including commands that reach this machine's platform.
