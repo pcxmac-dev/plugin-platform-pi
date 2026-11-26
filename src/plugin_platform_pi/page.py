@@ -58,7 +58,8 @@ PORTS = ("It opens no port by itself here. Only a sign-in to a hosted provider (
          "MCP server (none of Liminal's asks one: it takes a token) would listen on this machine's own loopback while "
          "it lasts.")
 SESSIONS = ("Pi saves every session (your prompts, its answers, the commands it ran and what they said) under "
-            "{sessions}. The plugin keeps the newest " f"{SESSIONS_KEPT} ({SESSIONS_BYTES // 1_000_000} MB at the most) "
+            "{sessions}. The plugin keeps the newest "
+            f"{SESSIONS_KEPT} ({SESSIONS_BYTES // 1_000_000} MB at the most) "
             "and removes older ones as each Open… opens a window, while none of its windows is open.")
 MODEL = "Pi asks the model server's chat completions API (/v1/chat/completions) and needs a model that calls tools."
 SHARED = ("This copy has its own program and its own folders ({agent}: PI_CODING_AGENT_DIR): nothing is read from or "
@@ -68,10 +69,10 @@ CONFIGURED = ("models.json, mcp.json and settings.json in {agent} and the permis
               "whole at each start (an edit there lasts until the next one), and the model is named on its command "
               "line, so a window still open keeps its server.")
 PLAIN = "{server} is asked over plain http on another machine: prompts and code can be read on the way."
-KEYED = ("{server}'s key reaches Pi in its environment alone (" + SECRET + ", which its provider's apiKey names), never "
-         "in a file or on its command line.")
-MCP = (f"With Liminal's MCP on (under Use…), each window reaches it through the MCP plugin's bridge, an MCP server of "
-       f"Pi's ({MCP_NAME}), with a token for that window alone in Pi's environment ({MCP_SECRET}, which its mcp.json "
+KEYED = ("{server}'s key reaches Pi in its environment alone (" + SECRET + ", which its provider's apiKey names), "
+         "never in a file or on its command line.")
+MCP = (f"With Liminal's MCP on (under Use…), each window reaches it through the MCP plugin's bridge, an MCP server "
+       f"of Pi's ({MCP_NAME}), with a token for that window alone in Pi's environment ({MCP_SECRET}, which its mcp.json "
        "entry names), ended once the window is gone. The commands you allow run without it, but a program running as "
        "you could still read Pi's own environment. What it may list and call is granted on the MCP plugin's page, "
        "which may hold a call for your answer there: Pi waits as long as the MCP plugin holds it, and a minute more.")
@@ -168,8 +169,8 @@ def open_words(*, window: bool) -> str:
 
 def parts(node_archive: str, rg_archive: str) -> str:
     """What Install downloads, in words (the install's confirmation goes on "… is downloaded from")."""
-    return (f"Node.js {NODE_VERSION} ({node_archive}), Pi {PIN} with the packages npm resolves for it (npm's registry), "
-            f"and ripgrep {RIPGREP} ({rg_archive})")
+    return (f"Node.js {NODE_VERSION} ({node_archive}), Pi {PIN} with the packages npm resolves for it (npm's "
+            f"registry), and ripgrep {RIPGREP} ({rg_archive})")
 
 
 def keeps(config: str) -> str:

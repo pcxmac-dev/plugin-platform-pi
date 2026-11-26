@@ -105,7 +105,8 @@ PERMISSION = """\
 // call that is not a read: each shell command (bash, powershell), each edit and each write, and any other tool. A
 // call you decline is not run, and the model is told so. Without a screen to ask on (Pi's print and json modes)
 // every such call is refused, and so is a shell command too long to be shown whole.
-// Not asked: its reads ({reads}), and Liminal's MCP tools ({elsewhere}*), which the MCP plugin grants and holds.
+// Not asked: its reads ({reads}), and Liminal's MCP tools ({elsewhere}*), which the MCP plugin
+// grants and holds itself.
 // A command you allow runs without Liminal's token and key in its environment ({unset}).
 
 const READS = new Set({reads_js});
@@ -119,12 +120,13 @@ const DECLINED = "The user declined this call (Liminal's permission step): it wa
 // control and direction characters made visible, so that what is asked cannot draw over its own question
 function shown(value: unknown): string {{
   const said = typeof value === "string" ? value : value === undefined || value === null ? "" : String(value);
-  return said.replace(/[\\u0000-\\u0008\\u000b-\\u001f\\u007f-\\u009f\\u200b-\\u200f\\u2028-\\u202e\\u2066-\\u2069\\ufeff]/g,
-    (c) => "\\\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"));
+  const odd = /[\\u0000-\\u0008\\u000b-\\u001f\\u007f-\\u009f\\u200b-\\u200f\\u2028-\\u202e\\u2066-\\u2069\\ufeff]/g;
+  return said.replace(odd, (c) => "\\\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"));
 }}
 
 function cut(said: string): string {{
-  return said.length <= MOST ? said : said.slice(0, MOST) + "\\n(" + (said.length - MOST) + " more characters not shown)";
+  if (said.length <= MOST) return said;
+  return said.slice(0, MOST) + "\\n(" + (said.length - MOST) + " more characters not shown)";
 }}
 
 function described(name: string, input: any): string {{

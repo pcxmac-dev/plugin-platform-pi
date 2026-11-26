@@ -43,7 +43,7 @@ NODE_FILES = "https://nodejs.org/dist/v24.22.3/"
 # Not read before this release: empty, so Install is refused in words until a release pins them.
 NODE_BUILDS: dict[tuple[str, str], tuple[str, int, str]] = {}
 
-# -- what Pi runs for its searches --------------------------------------------------------------------------------------
+# -- what Pi runs for its searches -------------------------------------------------------------------------------------
 RIPGREP = "15.1.0"
 RIPGREP_FILES = "https://github.com/BurntSushi/ripgrep/releases/download/15.1.0/"
 RIPGREP_LICENCE = "ripgrep 15.1.0: Unlicense or MIT (Andrew Gallant)."

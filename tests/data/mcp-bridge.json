@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "liminal": {
+      "command": "C:\\Python\\python.exe",
+      "args": [
+        "-I",
+        "-S",
+        "C:\\plugins\\plugin-platform-mcp\\bridge.py",
+        "--port",
+        "8775"
+      ],
+      "env": {
+        "LIMINAL_MCP_TOKEN": "${LIMINAL_MCP_TOKEN}"
+      },
+      "timeout": 110
+    }
+  }
+}

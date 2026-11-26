@@ -1,0 +1,20 @@
+{
+  "providers": {
+    "liminal": {
+      "baseUrl": "http://127.0.0.1:9931/v1",
+      "api": "openai-completions",
+      "apiKey": "${LIMINAL_SERVER_KEY}",
+      "models": [
+        {
+          "id": "Qwen3-Coder-30B-A3B-Q4_K_M",
+          "name": "Qwen3-Coder-30B-A3B-Q4_K_M",
+          "input": [
+            "text"
+          ],
+          "contextWindow": 65536,
+          "maxTokens": 8192
+        }
+      ]
+    }
+  }
+}
