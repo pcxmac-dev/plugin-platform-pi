@@ -338,7 +338,7 @@ class PiPlugin(Harness):
         lines.append(f"Node.js {pins.NODE_VERSION}: {program}")
         cache = self.home / "downloads" / "npm"
         env = node.child_env(cache, node.write_npmrc(self.home), pins.REGISTRY, base=self.out.env,
-                             drop=self.dropped(), system=self.system)
+                             drop=(*self.dropped(), *pins.DROP), system=self.system)
         lines += node.put(program, npm_cli, folder / "cli", PI_PIN, kept=node.lock_folder(self.home, PI_PIN), env=env,
                           log=log, cancel=cancel, command=pins.BIN, stream=self._npm_run())
         for tool, source in found[1:]:
