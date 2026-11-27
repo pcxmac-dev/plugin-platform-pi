@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.1 (2026-11-27)
+
+The review of item 14 (plugins-os-ai P3-5): a session written within the last day is never pruned.
+
+- **Before**, the pruning at each Open… checked only for the windows this plugin opened. A Pi started from Command…'s
+  lines (the only way where there is no desktop: Linux, WSL) is no such window, and on Linux a file it holds open is
+  unlinked all the same: its live session could go at the next Open… (past the newest 100, or alone past the 200 MB
+  kept) and be lost when Pi exits.
+- **Now** a session written within a day of now (`SESSIONS_FRESH_S`), or later than now, is kept and counted among
+  the newest; the older ones are pruned as before. The page says so.
+- Tests: `tests/test_launch.py`, on Windows and on Linux, a session written a minute ago with no window open, alone
+  past the bytes kept, stays.
+
 ## 0.1.0 (2026-11-26)
 
 The first release: Pi as one of the platform's top four open-source harnesses (the user, 2026-11-18: "top 4 inference

@@ -88,12 +88,12 @@ def test_its_command_line_names_the_permission_step_the_provider_and_the_model()
 # -- the permission step -----------------------------------------------------------------------------------------------
 @pytest.fixture
 def step() -> str:
-    return files.permission_ts("0.1.0")
+    return files.permission_ts("0.1.1")
 
 
 def test_the_permission_step_is_its_golden(step):
     assert step == (DATA / "permission.ts").read_text(encoding="utf-8")
-    assert step.splitlines()[0] == "// Liminal's permission step for Pi, v1 (plugin-platform-pi 0.1.0, for Pi 1.5.2)."
+    assert step.splitlines()[0] == "// Liminal's permission step for Pi, v1 (plugin-platform-pi 0.1.1, for Pi 1.5.2)."
     assert all(len(line) <= 120 for line in step.splitlines())
 
 
@@ -115,7 +115,7 @@ def test_only_reads_run_without_asking_and_liminals_mcp_tools_only_while_it_is_w
     assert "name.length > DECIDED_ELSEWHERE.length" in step  # the prefix alone is no tool of Liminal's
     for tool in ("bash", "powershell", "edit", "write"):  # never let through by a list
         assert f'"{tool}"' not in step.split("const READS")[1].split(";")[0]
-    on = files.permission_ts("0.1.0", mcp=True)
+    on = files.permission_ts("0.1.1", mcp=True)
     assert on == (DATA / "permission-mcp.ts").read_text(encoding="utf-8")
     assert 'const DECIDED_ELSEWHERE = "mcp__liminal__";' in on and "which the MCP plugin\n// grants and holds" in on
     assert [a for a, b in zip(step.splitlines(), on.splitlines()) if a != b] == [

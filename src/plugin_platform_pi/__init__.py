@@ -62,7 +62,7 @@ from . import constants as pins
 from . import files, page
 from .apis import APIS, NODE, NPM, PI
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 LIBS_FLOOR = "1.99.0"  # pyproject's floor: the base's changes page-only (1.99.0), machines/node.py (1.66.0)
 PI_PIN = node.Pin(pins.PACKAGE, pins.PIN, pins.INTEGRITY)
 

@@ -104,7 +104,8 @@ The commands you type yourself after `!` are yours and are not asked.
   an MCP server (none of Liminal's asks one) would listen on this machine's own loopback while it lasts.
 - **Its sessions**: Pi saves every session (your prompts, its answers, the commands it ran and what they said) in its
   sessions folder. The plugin keeps the newest 100 (200 MB at the most) and removes older ones as each Open… opens a
-  window, while none of its windows is open; Command… removes nothing.
+  window, while none of its windows is open, never one written within the last day (a Pi started from Command…'s
+  lines may be writing it); Command… removes nothing.
 - The model and its context; a key, plain http and Liminal's MCP where they apply; what it shares with a Pi of yours;
   its configuration.
 

@@ -1,4 +1,4 @@
-// Liminal's permission step for Pi, v1 (plugin-platform-pi 0.1.0, for Pi 1.5.2).
+// Liminal's permission step for Pi, v1 (plugin-platform-pi 0.1.1, for Pi 1.5.2).
 // Written whole by the plugin at every start: an edit here lasts until the next one.
 //
 // Pi asks nothing before a tool call, by its makers' design. This extension asks you on Pi's screen before every

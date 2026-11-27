@@ -106,14 +106,14 @@ def test_a_copy_the_registry_hands_out_shares_what_the_plugin_keeps():
 
 def test_its_versions_and_its_floor_are_pyprojects():
     project = PYPROJECT["project"]
-    assert module.__version__ == project["version"] == "0.1.0"
+    assert module.__version__ == project["version"] == "0.1.1"
     assert project["dependencies"] == ["liminal-libs>=1.99.0"]
     assert module.LIBS_FLOOR == module.MACHINE.LIBS_FLOOR == "1.99.0"  # the base's changes page-only
     assert project["entry-points"]["liminal.providers"] == {"pi": "plugin_platform_pi"}
     assert release(liminal_libs.__version__) >= release(module.LIBS_FLOOR)
     assert module.MACHINE.too_old() == ""
     changelog = (HERE / "CHANGELOG.md").read_text(encoding="utf-8")
-    assert re.search(r"^## (\S+) \((\S+)\)", changelog, re.M).groups() == (module.__version__, "2026-11-26")
+    assert re.search(r"^## (\S+) \((\S+)\)", changelog, re.M).groups() == (module.__version__, "2026-11-27")
 
 
 def test_a_library_older_than_its_floor_is_said_and_refuses_every_hook(monkeypatch, tmp_path):
