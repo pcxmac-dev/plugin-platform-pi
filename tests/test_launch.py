@@ -373,7 +373,9 @@ def test_liminals_mcp_off_writes_no_server(windows, project):
 
 # -- its sessions ------------------------------------------------------------------------------------------------------
 def sessions(p, count: int, size: int = 10) -> list[Path]:
-    """`count` stand-in sessions, the oldest first, laid out under its sessions folder by the folder they were in."""
+    """`count` stand-in sessions, the oldest first, laid out under its sessions folder by the folder they were in,
+    each written days before the clock's now (which it moves on to 10,000,000 s): none is too fresh to prune."""
+    p.out.clock.now = max(p.out.clock.now, 10_000_000.0)
     made_ = []
     for n in range(count):
         path = p.sessions_dir() / f"--project-{n % 3}--" / f"2026-11-{n % 28 + 1:02d}_{n:04d}.jsonl"
@@ -401,6 +403,21 @@ def test_sessions_past_their_bytes_go_too_and_their_empty_folders(windows, monke
     monkeypatch.setattr(constants, "SESSIONS_BYTES", 250)
     made_ = sessions(p, 4, size=100)
     assert p.prune_sessions() == 2 and [x.exists() for x in made_] == [False, False, True, True]
+
+
+@pytest.mark.parametrize("system", ["windows", "linux"])
+def test_a_session_written_lately_is_never_pruned_though_past_what_is_kept(tmp_path, monkeypatch, system):
+    """A Pi started from Command…'s lines is no window of the plugin's: its session, written a minute ago and alone
+    past the bytes kept, stays (on Linux it would be unlinked while Pi holds it open); the old ones go."""
+    p = made(tmp_path, system)
+    old = sessions(p, 3, size=100)
+    live = p.sessions_dir() / "--project-live--" / "2026-11-27_live.jsonl"
+    live.parent.mkdir(parents=True, exist_ok=True)
+    live.write_bytes(b"x" * 500)
+    os.utime(live, (p.out.clock() - 60, p.out.clock() - 60))
+    monkeypatch.setattr(constants, "SESSIONS_BYTES", 250)
+    assert not p.running()
+    assert p.prune_sessions() == 3 and live.exists() and not any(x.exists() for x in old)
 
 
 def test_no_session_is_removed_by_command_or_while_a_window_is_open(windows, project):

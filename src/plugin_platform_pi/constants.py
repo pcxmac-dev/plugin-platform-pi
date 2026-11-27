@@ -82,6 +82,9 @@ SESSION = re.compile(r"\.jsonl$")
 SESSIONS_KEPT = 100  # the newest sessions kept at each Open… (the plan: "pruned at each Open...")
 SESSIONS_BYTES = 200_000_000  # and no more than this many bytes of them, the newest first
 SESSIONS_LOOKED = 100_000  # files looked at, at the most, in one pruning
+# a session written within this long is never removed (0.1.1; the review of item 14, P3-5): a Pi started from
+# Command…'s lines is no window of the plugin's, and on Linux a file it holds open is unlinked all the same
+SESSIONS_FRESH_S = 24 * 3600.0
 # what of Pi's own settings.json survives the plugin's writing it whole: its note of the changelog it last showed
 KEPT_SETTINGS = ("lastChangelogVersion",)
 

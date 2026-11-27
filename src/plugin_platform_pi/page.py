@@ -60,7 +60,8 @@ PORTS = ("It opens no port by itself here. Only a sign-in to a hosted provider (
 SESSIONS = ("Pi saves every session (your prompts, its answers, the commands it ran and what they said) under "
             "{sessions}. The plugin keeps the newest "
             f"{SESSIONS_KEPT} ({SESSIONS_BYTES // 1_000_000} MB at the most) "
-            "and removes older ones as each Open… opens a window, while none of its windows is open.")
+            "and removes older ones as each Open… opens a window, while none of its windows is open, never one "
+            "written within the last day (a Pi started from Command…'s lines may be writing it).")
 MODEL = "Pi asks the model server's chat completions API (/v1/chat/completions) and needs a model that calls tools."
 SHARED = ("This copy has its own program and its own folders ({agent}: PI_CODING_AGENT_DIR): nothing is read from or "
           "written into {theirs}, and a Pi of yours is never run.")

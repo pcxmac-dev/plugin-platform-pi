@@ -581,11 +581,17 @@ class PiPlugin(Harness):
     def prune_sessions(self) -> int:
         """Older sessions removed: all but the newest SESSIONS_KEPT, and past SESSIONS_BYTES of them (the newest
         first), then the folders that held them, if empty. Nothing while one of its windows is open (a session may be
-        writing its own). The files removed."""
+        writing its own), and never a session written within SESSIONS_FRESH_S (0.1.1): a Pi started from Command…'s
+        lines is no window of the plugin's, and may be writing it (it is kept, and counted among the newest). The
+        files removed."""
         if self.running():
             return 0
+        now = self.out.clock()
         kept = total = removed = 0
-        for _, size, path in self.sessions():
+        for written, size, path in self.sessions():
+            if now - written < pins.SESSIONS_FRESH_S:  # (a time ahead of the clock's, too)
+                kept, total = kept + 1, total + size
+                continue
             if kept < pins.SESSIONS_KEPT and total + size <= pins.SESSIONS_BYTES:
                 kept, total = kept + 1, total + size
                 continue
